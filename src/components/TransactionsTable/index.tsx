@@ -11,6 +11,14 @@ import {
 export function TransactionsTable() {
   const { transactions, deleteTransaction } = useTransactions();
 
+  function handleDeleteTransaction(id: string) {
+    const userDecision = window.confirm('Você tem certeza que deseja apagar esse registro?');
+
+    if (userDecision) {
+      deleteTransaction(id);
+    }
+  }
+
   const parsedTransactions = useMemo(() => {
     return transactions.map(transaction => ({
       ...transaction,
@@ -43,7 +51,7 @@ export function TransactionsTable() {
               <td>
                 <button
                   type="button"
-                  onClick={() => deleteTransaction(transaction.id)}
+                  onClick={() => handleDeleteTransaction(transaction.id)}
                 >
                   <Trash color="#E52E4D" size={18} />
                 </button>
