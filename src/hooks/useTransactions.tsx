@@ -1,9 +1,13 @@
-import { createContext, useContext, useEffect, useState } from 'react';
-
-import { api } from '../services/api';
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState
+} from 'react';
+import { v4 } from 'uuid';
 
 interface Transaction {
-  id: number;
+  id: string;
   title: string;
   type: 'deposit' | 'withdraw';
   amount: number;
@@ -19,8 +23,10 @@ interface TransactionsProviderProps {
 
 interface TransactionsContextData {
   transactions: Transaction[];
-  createTransaction(transaction: TransactionInput): Promise<void>;
+  createTransaction(transaction: TransactionInput): void;
 }
+
+const LOCAL_STORAGE_KEY = "@my-finances:transactions";
 
 const TransactionsContext = createContext<TransactionsContextData>({} as TransactionsContextData);
 
@@ -28,17 +34,26 @@ function TransactionsProvider({ children }: TransactionsProviderProps) {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
 
   useEffect(() => {
-    api.get('/transactions')
-      .then(response => setTransactions(response.data.transactions));
+    const storagedTransactions = localStorage.getItem(LOCAL_STORAGE_KEY);
+
+    if (storagedTransactions) {
+      setTransactions(JSON.parse(storagedTransactions))
+    }
   }, []);
 
   async function createTransaction(transaction: TransactionInput) {
-    const response = await api.post('/transactions', {
+    const newTransaction = {
+      id: v4(),
       ...transaction,
-      createdAt: new Date()
-    });
+      createdAt: String(new Date())
+    };
 
-    setTransactions(prevState => ([...prevState, response.data.transaction]))
+    localStorage.setItem(
+      LOCAL_STORAGE_KEY,
+      JSON.stringify([...transactions, newTransaction])
+    );
+
+    setTransactions(prevState => ([...prevState, newTransaction]))
   }
 
   return (

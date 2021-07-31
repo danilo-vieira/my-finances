@@ -5,6 +5,7 @@ import outcomeImg from '../../assets/outcome.svg';
 import totalImg from '../../assets/total.svg';
 
 import { useTransactions } from '../../hooks/useTransactions';
+import { convertCurrencyToBRL } from '../../utils/convertCurrencyToBRL';
 
 import {
   Container
@@ -30,17 +31,10 @@ export function Summary() {
       total: 0
     });
 
-    const convertToBRL = (amount: number) => {
-      return new Intl.NumberFormat('pt-BR', {
-        style: 'currency',
-        currency: 'BRL'
-      }).format(amount)
-    }
-
     return {
-      income: convertToBRL(result.income),
-      outcome: convertToBRL(result.outcome),
-      total: convertToBRL(result.total),
+      income: convertCurrencyToBRL(result.income),
+      outcome: convertCurrencyToBRL(result.outcome),
+      total: convertCurrencyToBRL(result.total),
     }
   }, [transactions]);
 

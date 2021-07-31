@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 
 import { useTransactions } from '../../hooks/useTransactions';
+import { convertCurrencyToBRL } from '../../utils/convertCurrencyToBRL';
 
 import {
   Container
@@ -13,14 +14,8 @@ export function TransactionsTable() {
     return transactions.map(transaction => ({
       ...transaction,
       amount: transaction.type === 'withdraw'
-        ? `${'- ' + new Intl.NumberFormat('pt-BR', {
-          style: 'currency',
-          currency: 'BRL'
-        }).format(transaction.amount)}`
-        : new Intl.NumberFormat('pt-BR', {
-          style: 'currency',
-          currency: 'BRL'
-        }).format(transaction.amount),
+        ? `${'- ' + convertCurrencyToBRL(transaction.amount)}`
+        : convertCurrencyToBRL(transaction.amount),
       createdAt: new Intl.DateTimeFormat('pt-BR').format(new Date(transaction.createdAt))
     }))
   }, [transactions]);

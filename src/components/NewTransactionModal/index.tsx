@@ -34,7 +34,7 @@ export function NewTransactionModal({
   async function handleCreateNewTransaction(e: FormEvent) {
     e.preventDefault();
 
-    await createTransaction({
+    createTransaction({
       title,
       amount: Number(amount),
       category,
