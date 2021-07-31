@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import { Trash } from 'react-feather';
 
 import { useTransactions } from '../../hooks/useTransactions';
 import { convertCurrencyToBRL } from '../../utils/convertCurrencyToBRL';
@@ -8,7 +9,7 @@ import {
 } from './styles';
 
 export function TransactionsTable() {
-  const { transactions } = useTransactions();
+  const { transactions, deleteTransaction } = useTransactions();
 
   const parsedTransactions = useMemo(() => {
     return transactions.map(transaction => ({
@@ -39,6 +40,14 @@ export function TransactionsTable() {
               <td className={transaction.type}>{transaction.amount}</td>
               <td>{transaction.category}</td>
               <td>{transaction.createdAt}</td>
+              <td>
+                <button
+                  type="button"
+                  onClick={() => deleteTransaction(transaction.id)}
+                >
+                  <Trash color="#E52E4D" size={18} />
+                </button>
+              </td>
             </tr>
           ))}
         </tbody>

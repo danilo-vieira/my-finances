@@ -24,6 +24,7 @@ interface TransactionsProviderProps {
 interface TransactionsContextData {
   transactions: Transaction[];
   createTransaction(transaction: TransactionInput): void;
+  deleteTransaction(id: string): void;
 }
 
 const LOCAL_STORAGE_KEY = "@my-finances:transactions";
@@ -41,7 +42,7 @@ function TransactionsProvider({ children }: TransactionsProviderProps) {
     }
   }, []);
 
-  async function createTransaction(transaction: TransactionInput) {
+  function createTransaction(transaction: TransactionInput) {
     const newTransaction = {
       id: v4(),
       ...transaction,
@@ -56,8 +57,23 @@ function TransactionsProvider({ children }: TransactionsProviderProps) {
     setTransactions(prevState => ([...prevState, newTransaction]))
   }
 
+  function deleteTransaction(id: string) {
+    const updatedTransactions = transactions.filter(transaction =>
+      transaction.id !== id
+    );
+
+    localStorage.setItem(
+      LOCAL_STORAGE_KEY,
+      JSON.stringify(updatedTransactions)
+    )
+
+    setTransactions(updatedTransactions);
+  }
+
   return (
-    <TransactionsContext.Provider value={{ transactions, createTransaction }}>
+    <TransactionsContext.Provider
+      value={{ transactions, createTransaction, deleteTransaction }}
+    >
       {children}
     </TransactionsContext.Provider>
   )
