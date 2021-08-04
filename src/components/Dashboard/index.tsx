@@ -1,5 +1,5 @@
 import { Summary } from '../Summary';
-import { TransactionsTable } from '../TransactionsTable';
+import { TransactionsList } from '../TransactionsList';
 
 import {
   Container,
@@ -9,7 +9,7 @@ export function Dashboard() {
   return (
     <Container>
       <Summary />
-      <TransactionsTable />
+      <TransactionsList />
     </Container>
   );
 }

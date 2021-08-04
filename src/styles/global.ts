@@ -91,4 +91,27 @@ export const GlobalStyle = createGlobalStyle`
       filter: brightness(0.8);
     }
   }
+
+  @media (max-width: 768px) {
+    .react-modal-overlay {
+      align-items: flex-end;
+    }
+
+    .react-modal-content {
+      max-width: 768px;
+      background: var(--background);
+      padding: 1.5rem;
+      position: relative;
+      border-radius: 1rem 1rem 0 0;
+
+      display: flex;
+      justify-content: center;
+    }
+
+    .react-modal-close {
+      position: absolute;
+      top: 2.06rem;
+      right: 1.5rem;
+    }
+  }
 `;

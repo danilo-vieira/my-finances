@@ -1,4 +1,6 @@
 import { useMemo } from 'react';
+import { format, isAfter, isBefore } from 'date-fns';
+import ptBR from 'date-fns/locale/pt-BR';
 
 import incomeImg from '../../assets/income.svg';
 import outcomeImg from '../../assets/outcome.svg';
@@ -15,26 +17,80 @@ export function Summary() {
   const { transactions } = useTransactions();
 
   const formattedSummary = useMemo(() => {
+    const formatHelper = (date: string | { earlyDate: Date, laterDate: Date }, type: string) => {
+      if (typeof (date) === 'object' && (date.earlyDate && date.laterDate)) {
+        return `
+        ${format(date.earlyDate, "'De' dd 'de' MMMM 'à'", { locale: ptBR })} 
+        ${format(date.laterDate, "dd 'de' MMMM", { locale: ptBR })}`
+      } else if (typeof (date) === 'string') {
+        return format(
+          new Date(date),
+          `'Última ${type === "income" ? "entrada" : "saída"} 'dd 'de' MMMM`,
+          {
+            locale: ptBR
+          });
+      }
+    }
+
+    const calcTotalTimeInterval = transactions.reduce((acc, transaction) => {
+      if (!acc.earlyDate && !acc.laterDate) {
+        acc.earlyDate = new Date(transaction.createdAt);
+        acc.laterDate = new Date(transaction.createdAt);
+      }
+      else if (isBefore(new Date(transaction.createdAt), acc.earlyDate)) {
+        acc.earlyDate = new Date(transaction.createdAt);
+      } else if (isAfter(new Date(transaction.createdAt), acc.laterDate)) {
+        acc.laterDate = new Date(transaction.createdAt);
+      }
+
+      return acc;
+    }, {} as { earlyDate: Date, laterDate: Date })
+
     const result = transactions.reduce((acc, curr) => {
       if (curr.type === 'deposit') {
-        acc.income += curr.amount;
-        acc.total += curr.amount;
+        acc.income.value += curr.amount;
+        acc.total.value += curr.amount;
+        acc.income.lastUpdate = formatHelper(
+          curr.createdAt,
+          'income'
+        ) || ''
       } else {
-        acc.outcome += curr.amount;
-        acc.total -= curr.amount;
+        acc.outcome.value += curr.amount;
+        acc.total.value -= curr.amount;
+        acc.outcome.lastUpdate = formatHelper(
+          curr.createdAt,
+          'outcome'
+        ) || ''
       }
 
       return acc;
     }, {
-      income: 0,
-      outcome: 0,
-      total: 0
+      income: {
+        value: 0,
+        lastUpdate: ''
+      },
+      outcome: {
+        value: 0,
+        lastUpdate: ''
+      },
+      total: {
+        value: 0
+      }
     });
 
     return {
-      income: convertCurrencyToBRL(result.income),
-      outcome: convertCurrencyToBRL(result.outcome),
-      total: convertCurrencyToBRL(result.total),
+      income: {
+        value: convertCurrencyToBRL(result.income.value),
+        lastUpdate: result.income.lastUpdate
+      },
+      outcome: {
+        value: convertCurrencyToBRL(result.outcome.value),
+        lastUpdate: result.outcome.lastUpdate
+      },
+      total: {
+        value: convertCurrencyToBRL(result.total.value),
+        resume: formatHelper(calcTotalTimeInterval, 'total'),
+      }
     }
   }, [transactions]);
 
@@ -46,7 +102,8 @@ export function Summary() {
           <img src={incomeImg} alt="Entradas" />
         </header>
 
-        <strong>{formattedSummary.income}</strong>
+        <strong>{formattedSummary.income.value}</strong>
+        <p>{formattedSummary.income.lastUpdate || 'Sem registros ainda'}</p>
       </div>
 
       <div>
@@ -55,7 +112,8 @@ export function Summary() {
           <img src={outcomeImg} alt="Saídas" />
         </header>
 
-        <strong>{formattedSummary.outcome}</strong>
+        <strong>{formattedSummary.outcome.value}</strong>
+        <p>{formattedSummary.outcome.lastUpdate || 'Sem registros ainda'}</p>
       </div>
 
       <div className="highlight-background">
@@ -64,7 +122,8 @@ export function Summary() {
           <img src={totalImg} alt="Total" />
         </header>
 
-        <strong>{formattedSummary.total}</strong>
+        <strong>{formattedSummary.total.value}</strong>
+        <p>{formattedSummary.total.resume || 'Sem registros ainda'}</p>
       </div>
     </Container>
   );

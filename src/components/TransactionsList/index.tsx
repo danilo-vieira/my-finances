@@ -3,12 +3,13 @@ import { Trash } from 'react-feather';
 
 import { useTransactions } from '../../hooks/useTransactions';
 import { convertCurrencyToBRL } from '../../utils/convertCurrencyToBRL';
+import { ListItem } from '../ListItem';
 
 import {
   Container
 } from './styles';
 
-export function TransactionsTable() {
+export function TransactionsList() {
   const { transactions, deleteTransaction } = useTransactions();
 
   function handleDeleteTransaction(id: string) {
@@ -31,7 +32,7 @@ export function TransactionsTable() {
 
   return (
     <Container>
-      <table>
+      <table className="desktop">
         <thead>
           <tr>
             <th>Título</th>
@@ -60,6 +61,28 @@ export function TransactionsTable() {
           ))}
         </tbody>
       </table>
+
+      <div className="mobile">
+        <header>
+          <span>Listagem</span>
+          <span>
+            {
+              parsedTransactions.length === 1
+                ? '1 item'
+                : `${parsedTransactions.length} itens`
+            }
+          </span>
+        </header>
+
+        <ul>
+          {parsedTransactions.map(transaction => (
+            <ListItem
+              key={transaction.id}
+              transaction={transaction}
+            />
+          ))}
+        </ul>
+      </div>
     </Container>
   );
 }
