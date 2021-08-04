@@ -29,4 +29,19 @@ export const Content = styled.div`
       filter: brightness(0.9);
     }
   }
+
+  @media (max-width: 768px) {
+    padding: 2rem 1.56rem 8.25rem;
+
+    img {
+      width: 8.4rem;
+      height: 1.95rem;
+    }
+
+    button {
+      height: 2.5rem;
+      padding: 0.687rem;
+      font-size: 0.75rem;
+    }
+  }
 `;

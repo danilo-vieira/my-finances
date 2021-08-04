@@ -46,6 +46,25 @@ export const Container = styled.form`
       filter: brightness(0.9);
     }
   }
+
+  @media (max-width: 768px) {
+    max-width: 500px;
+
+    h2 {
+      font-size: 1.25rem;
+      margin-bottom: 1.5rem;
+    }
+
+    input {
+      & + input {
+        margin-top: 0.5rem;
+      }
+    }
+
+    button[type="submit"] {
+      margin-top: 0.5rem;
+    }
+  }
 `;
 
 export const TransactionTypeContainer = styled.div`
@@ -53,6 +72,10 @@ export const TransactionTypeContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 0.5rem;
+
+  @media (max-width: 768px) {
+    margin: 0.5rem 0;
+  }
 `;
 
 interface RadioBoxProps {

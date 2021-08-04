@@ -5,4 +5,8 @@ export const Container = styled.main`
   margin: 0 auto;
 
   padding: 0 1rem 9.5rem;
+
+  @media (max-width: 768px) {
+    padding: 0 1.5rem;
+  }
 `;
