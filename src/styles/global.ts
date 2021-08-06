@@ -92,7 +92,7 @@ export const GlobalStyle = createGlobalStyle`
     }
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: 576px) {
     .react-modal-overlay {
       align-items: flex-end;
     }

@@ -47,7 +47,7 @@ export const Container = styled.form`
     }
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: 576px) {
     max-width: 500px;
 
     h2 {
@@ -73,7 +73,7 @@ export const TransactionTypeContainer = styled.div`
   grid-template-columns: repeat(2, 1fr);
   gap: 0.5rem;
 
-  @media (max-width: 768px) {
+  @media (max-width: 576px) {
     margin: 0.5rem 0;
   }
 `;

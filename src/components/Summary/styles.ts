@@ -37,7 +37,7 @@ export const Container = styled.div`
     }
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: 576px) {
     margin-top: -6.25rem;
     gap: 1rem;
 
