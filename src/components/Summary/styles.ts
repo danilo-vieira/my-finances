@@ -6,7 +6,13 @@ export const Container = styled.div`
   gap: 2rem;
   margin-top: -4.25rem;
 
+  overflow-x: scroll;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
   div {
+    width: 22rem;
     background: var(--shape);
     padding: 1.5rem 2rem;
     border-radius: 0.3rem;
@@ -64,11 +70,6 @@ export const Container = styled.div`
           color: var(--shape);
         }
       }
-    }
-
-    overflow-x: scroll;
-    &::-webkit-scrollbar {
-      display: none;
     }
   }
 `;
