@@ -30,7 +30,7 @@ export const Content = styled.div`
     }
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: 576px) {
     padding: 2rem 1.56rem 8.25rem;
 
     img {
